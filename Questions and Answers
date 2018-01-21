@@ -1,4 +1,16 @@
-## 1. What are the names of the blocks which are less than 40 acres?
-## 2. What are the names of the orchards that have at least one block that is more than 10 acres?
-## 3. What are the names of the orchards which have exactly two blocks?
-## 4. What are the names of the orchards that are growing almonds?
+1. What are the names of the blocks which are less than 40 acres?
+select name from blocks where acres < 40;
+
+2. What are the names of the orchards that have at least one block that is more than 10 acres?
+select distinct orchards.name from blocks join orchards on blocks.orchard_id=orchards.id
+where blocks.acres>10;
+
+3. What are the names of the orchards which have exactly two blocks?
+select name from orchards where id in (select orchard_id from blocks group by orchard_id having COUNT(*)=2 );
+
+4. What are the names of the orchards that are growing almonds?
+select orchards.name from crops 
+join blocks_crops on blocks_crops.crop_id=id
+join blocks on blocks.id=blocks_crops.block_id
+join orchards on orchards.id=blocks.orchard_id
+where crops.name='Almond'--where crops.id=3;
